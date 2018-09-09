@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="list_options">
+        <item>Albums</item>
+        <item>Comments</item>
+        <item>Photos</item>
+        <item>Posts</item>
+        <item>Todos</item>
+        <item>Users</item>
+    </string-array>
+</resources>

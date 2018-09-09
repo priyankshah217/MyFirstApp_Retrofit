@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyFirstApp_Retrofit</string>
+    <string name="title_activity_display_list">DisplayListActivity</string>
+    <string name="action_settings">Settings</string>
+</resources>
