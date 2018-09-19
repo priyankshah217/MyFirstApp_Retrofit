@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.example.myfirstapp_retrofit.App;
 import com.example.myfirstapp_retrofit.R;
@@ -18,23 +17,27 @@ import com.example.myfirstapp_retrofit.models.Posts;
 import com.example.myfirstapp_retrofit.models.Todos;
 import com.example.myfirstapp_retrofit.models.Users;
 
+import org.reactivestreams.Subscription;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class DisplayListActivity extends AppCompatActivity {
 
+    @Inject
+    public API api;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String[] mDataset;
-
-    @Inject
-    public API api;
+    private Subscription subscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class DisplayListActivity extends AppCompatActivity {
         ((App) getApplication()).getApplicationComponent().inject(this);
         setContentView(R.layout.activity_display_list);
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MyActivity.SELECTED_ITEAM);
+        String message = intent.getStringExtra(MyActivity.SELECTED_ITEM);
         mRecyclerView = findViewById(R.id.recycle_text);
 
         mRecyclerView.setHasFixedSize(true);
@@ -53,140 +56,174 @@ public class DisplayListActivity extends AppCompatActivity {
 
         switch (message) {
             case "Posts":
-                getAllPosts();
-                break;
-            case "Albums":
-                getAllAlbums();
-                break;
-            case "Photos":
-                getAllPhotos();
-                break;
-            case "Todos":
-                getAllTodos();
+                Observable<List<Posts>> listOfPosts = api.getPosts();
+                listOfPosts.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Posts>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Posts> posts) {
+                        mDataset = new String[posts.size()];
+                        for (int i = 0; i < posts.size(); i++) {
+                            mDataset[i] = posts.get(i).getTitle();
+                        }
+                        mRecyclerView.setAdapter(new MyAdapter(mDataset));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
                 break;
+            case "Albums":
+                Observable<List<Albums>> listOfAlbums = api.getAlbums();
+                listOfAlbums.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Albums>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Albums> albums) {
+                        mDataset = new String[albums.size()];
+                        for (int i = 0; i < albums.size(); i++) {
+                            mDataset[i] = albums.get(i).getTitle();
+                        }
+                        mRecyclerView.setAdapter(new MyAdapter(mDataset));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+                break;
+            case "Photos":
+                Observable<List<Photos>> listOfPhotos = api.getPhotos();
+                listOfPhotos.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Photos>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Photos> photos) {
+                        mDataset = new String[photos.size()];
+                        for (int i = 0; i < photos.size(); i++) {
+                            mDataset[i] = photos.get(i).getTitle();
+                        }
+                        mRecyclerView.setAdapter(new MyAdapter(mDataset));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+                break;
+            case "Todos":
+                Observable<List<Todos>> listOfTodos = api.getTodos();
+                listOfTodos.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Todos>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Todos> todos) {
+                        mDataset = new String[todos.size()];
+                        for (int i = 0; i < todos.size(); i++) {
+                            mDataset[i] = todos.get(i).getTitle();
+                        }
+                        mRecyclerView.setAdapter(new MyAdapter(mDataset));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+                break;
             case "Comments":
-                getAllComments();
+                Observable<List<Comments>> listOfComments = api.getComments();
+                listOfComments.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Comments>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Comments> comments) {
+                        mDataset = new String[comments.size()];
+                        for (int i = 0; i < comments.size(); i++) {
+                            mDataset[i] = comments.get(i).getName();
+                        }
+                        mRecyclerView.setAdapter(new MyAdapter(mDataset));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
                 break;
             case "Users":
-                getAllUsers();
+                Observable<List<Users>> listOfUsers = api.getUsers();
+                listOfUsers.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Users>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Users> users) {
+                        mDataset = new String[users.size()];
+                        for (int i = 0; i < users.size(); i++) {
+                            mDataset[i] = users.get(i).getName();
+                        }
+                        mRecyclerView.setAdapter(new MyAdapter(mDataset));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
                 break;
         }
     }
-
-    private void getAllUsers() {
-        api.getUsers().enqueue(new Callback<List<Users>>() {
-            @Override
-            public void onResponse(Call<List<Users>> call, Response<List<Users>> response) {
-                List<Users> usersList = response.body();
-                mDataset = new String[usersList.size()];
-                for (int i = 0; i < usersList.size(); i++) {
-                    mDataset[i] = usersList.get(i).getName();
-                }
-                mRecyclerView.setAdapter(new MyAdapter(mDataset));
-            }
-
-            @Override
-            public void onFailure(Call<List<Users>> call, Throwable t) {
-                Log.d("TAG", "Response = " + t.toString());
-            }
-        });
-    }
-
-    private void getAllComments() {
-        api.getComments().enqueue(new Callback<List<Comments>>() {
-            @Override
-            public void onResponse(Call<List<Comments>> call, Response<List<Comments>> response) {
-                List<Comments> commentsList = response.body();
-                mDataset = new String[commentsList.size()];
-                for (int i = 0; i < commentsList.size(); i++) {
-                    mDataset[i] = commentsList.get(i).name;
-                }
-                mRecyclerView.setAdapter(new MyAdapter(mDataset));
-            }
-
-            @Override
-            public void onFailure(Call<List<Comments>> call, Throwable t) {
-                Log.d("TAG", "Response = " + t.toString());
-            }
-        });
-    }
-
-    private void getAllTodos() {
-        api.getTodos().enqueue(new Callback<List<Todos>>() {
-            @Override
-            public void onResponse(Call<List<Todos>> call, Response<List<Todos>> response) {
-                List<Todos> todosList = response.body();
-                mDataset = new String[todosList.size()];
-                for (int i = 0; i < todosList.size(); i++) {
-                    mDataset[i] = todosList.get(i).title;
-                }
-                mRecyclerView.setAdapter(new MyAdapter(mDataset));
-            }
-
-            @Override
-            public void onFailure(Call<List<Todos>> call, Throwable t) {
-                Log.d("TAG", "Response = " + t.toString());
-            }
-        });
-    }
-
-    private void getAllPhotos() {
-        api.getPhotos().enqueue(new Callback<List<Photos>>() {
-            @Override
-            public void onResponse(Call<List<Photos>> call, Response<List<Photos>> response) {
-                List<Photos> photosList = response.body();
-                mDataset = new String[photosList.size()];
-                for (int i = 0; i < photosList.size(); i++) {
-                    mDataset[i] = photosList.get(i).title;
-                }
-                mRecyclerView.setAdapter(new MyAdapter(mDataset));
-            }
-
-            @Override
-            public void onFailure(Call<List<Photos>> call, Throwable t) {
-                Log.d("TAG", "Response = " + t.toString());
-            }
-        });
-    }
-
-    private void getAllAlbums() {
-        api.getAlbums().enqueue(new Callback<List<Albums>>() {
-            @Override
-            public void onResponse(Call<List<Albums>> call, Response<List<Albums>> response) {
-                List<Albums> albumsList = response.body();
-                mDataset = new String[albumsList.size()];
-                for (int i = 0; i < albumsList.size(); i++) {
-                    mDataset[i] = albumsList.get(i).title;
-                }
-                mRecyclerView.setAdapter(new MyAdapter(mDataset));
-            }
-
-            @Override
-            public void onFailure(Call<List<Albums>> call, Throwable t) {
-                Log.d("TAG", "Response = " + t.toString());
-            }
-        });
-    }
-
-    private void getAllPosts() {
-        api.getPosts().enqueue(new Callback<List<Posts>>() {
-            @Override
-            public void onResponse(Call<List<Posts>> call, Response<List<Posts>> response) {
-                List<Posts> postsList = response.body();
-                mDataset = new String[postsList.size()];
-                for (int i = 0; i < postsList.size(); i++) {
-                    mDataset[i] = postsList.get(i).title;
-                }
-                mRecyclerView.setAdapter(new MyAdapter(mDataset));
-            }
-
-            @Override
-            public void onFailure(Call<List<Posts>> call, Throwable t) {
-                Log.d("TAG", "Response = " + t.toString());
-            }
-        });
-    }
-
-
 }
