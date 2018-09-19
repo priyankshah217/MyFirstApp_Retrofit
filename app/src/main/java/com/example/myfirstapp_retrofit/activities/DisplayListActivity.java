@@ -45,7 +45,7 @@ public class DisplayListActivity extends AppCompatActivity {
         ((App) getApplication()).getApplicationComponent().inject(this);
         setContentView(R.layout.activity_display_list);
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MyActivity.SELECTED_ITEAM);
+        String message = intent.getStringExtra(MyActivity.SELECTED_ITEM);
         mRecyclerView = findViewById(R.id.recycle_text);
 
         mRecyclerView.setHasFixedSize(true);
