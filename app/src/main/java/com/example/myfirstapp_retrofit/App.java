@@ -17,7 +17,7 @@ public class App extends Application {
                 .build();
     }
 
-    public ApplicationComponent getApplicationComponent(){
+    public ApplicationComponent getApplicationComponent() {
         return this.applicationComponent;
     }
 }

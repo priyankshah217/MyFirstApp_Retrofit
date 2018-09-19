@@ -10,25 +10,25 @@ import com.example.myfirstapp_retrofit.models.Users;
 
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 
 public interface API {
     @GET("posts/")
-    Call<List<Posts>> getPosts();
+    Observable<List<Posts>> getPosts();
 
     @GET("comments/")
-    Call<List<Comments>> getComments();
+    Observable<List<Comments>> getComments();
 
     @GET("albums/")
-    Call<List<Albums>> getAlbums();
+    Observable<List<Albums>> getAlbums();
 
     @GET("photos/")
-    Call<List<Photos>> getPhotos();
+    Observable<List<Photos>> getPhotos();
 
     @GET("todos/")
-    Call<List<Todos>> getTodos();
+    Observable<List<Todos>> getTodos();
 
     @GET("users/")
-    Call<List<Users>> getUsers();
+    Observable<List<Users>> getUsers();
 }

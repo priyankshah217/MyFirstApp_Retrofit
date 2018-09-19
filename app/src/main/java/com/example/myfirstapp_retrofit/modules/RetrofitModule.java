@@ -1,6 +1,7 @@
 package com.example.myfirstapp_retrofit.modules;
 
 import com.example.myfirstapp_retrofit.api.API;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -22,12 +23,13 @@ public class RetrofitModule {
         return new Retrofit.Builder()
                 .baseUrl("https://jsonplaceholder.typicode.com/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
     }
 
     @Provides
-    OkHttpClient getOkHttpCleint(HttpLoggingInterceptor httpLoggingInterceptor) {
+    OkHttpClient getOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor) {
         return new OkHttpClient.Builder()
                 .addInterceptor(httpLoggingInterceptor)
                 .build();
